@@ -13,8 +13,8 @@ def retrieve_img_url(comics_id: int):
     resp = requests.get(url)
     resp.raise_for_status()
 
-    comics_info = resp.json()
-    return comics_info['img'], comics_info['alt']
+    comics = resp.json()
+    return comics['img'], comics['alt']
 
 
 def retrieve_random_comics_num(url) -> int:
@@ -30,8 +30,8 @@ def download_image(url, dir_path: Path) -> Path:
     resp = requests.get(url)
     resp.raise_for_status()
 
-    url_parse = urllib.parse.urlsplit(url)
-    path = urllib.parse.unquote(url_parse.path)
+    url_part = urllib.parse.urlsplit(url)
+    path = urllib.parse.unquote(url_part.path)
     _, file_name = os.path.split(path)
 
     with open(dir_path.joinpath(file_name), 'wb') as f_in:
@@ -60,7 +60,7 @@ def main():
         url=vk_url,
         api_version=vk_api_v)
     resp = api.upload_foto(upload_url, downloaded_img)
-    medias_info = api.save_foto(
+    media_detail = api.retrieve_media_detail(
         url=vk_url,
         access_token=vk_access_token,
         group_id=vk_group_id,
@@ -70,8 +70,7 @@ def main():
         api_version=vk_api_v
     )
 
-    for media in medias_info:
-        attachments = f'photo{media.owner_id}_{media.media_id}'
+    attachments = f'photo{media_detail.owner_id}_{media_detail.media_id}'
 
     api.post_foto_to_group(
         url=vk_url,

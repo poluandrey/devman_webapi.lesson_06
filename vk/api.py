@@ -38,15 +38,14 @@ def upload_foto(url: str, file: Path) -> UploadFotoResp:
     return UploadFotoResp(server, photo, foto_hash)
 
 
-def save_foto(
+def retrieve_media_detail(
         url: str,
         access_token: str,
         group_id: str,
         photo: str,
         server: str,
         vk_hash: str,
-        api_version: str) -> List[SaveWallPhotoResp]:
-    media_info = []
+        api_version: str) -> SaveWallPhotoResp:
     method = 'photos.saveWallPhoto'
     vk_url = urljoin(url, method)
     params = {
@@ -60,14 +59,12 @@ def save_foto(
 
     resp = requests.post(vk_url, params=params)
     try:
-        vk_resp = resp.json().get('response')
+        vk_resp = resp.json().get('response')[0]
     except KeyError:
         return resp.json().get('error')
-    for resp_detail in vk_resp:
-        owner_id = resp_detail.get('owner_id')
-        media_id = resp_detail.get('id')
-        media_info.append(SaveWallPhotoResp(media_id, owner_id))
-    return media_info
+    owner_id = vk_resp.get('owner_id')
+    media_id = vk_resp.get('id')
+    return SaveWallPhotoResp(media_id, owner_id)
 
 
 def post_foto_to_group(
