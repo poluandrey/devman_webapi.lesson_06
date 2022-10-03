@@ -54,33 +54,35 @@ def main():
     comics_id = retrieve_random_comics_num(url)
     img_url, comment = retrieve_img_url(comics_id)
     downloaded_img = download_image(img_url, img_dir)
-    upload_url = api.retrieve_server_address(
-        group_id=vk_group_id,
-        access_token=vk_access_token,
-        url=vk_url,
-        api_version=vk_api_v)
-    resp = api.upload_foto(upload_url, downloaded_img)
-    media_detail = api.retrieve_media_detail(
-        url=vk_url,
-        access_token=vk_access_token,
-        group_id=vk_group_id,
-        photo=resp.photo,
-        server=resp.server,
-        vk_hash=resp.hash,
-        api_version=vk_api_v
-    )
+    try:
+        upload_url = api.retrieve_server_address(
+            group_id=vk_group_id,
+            access_token=vk_access_token,
+            url=vk_url,
+            api_version=vk_api_v)
+        resp = api.upload_foto(upload_url, downloaded_img)
+        media_detail = api.retrieve_media_detail(
+            url=vk_url,
+            access_token=vk_access_token,
+            group_id=vk_group_id,
+            photo=resp.photo,
+            server=resp.server,
+            vk_hash=resp.hash,
+            api_version=vk_api_v
+        )
 
-    attachments = f'photo{media_detail.owner_id}_{media_detail.media_id}'
+        attachments = f'photo{media_detail.owner_id}_{media_detail.media_id}'
 
-    api.post_foto_to_group(
-        url=vk_url,
-        access_token=vk_access_token,
-        attachments=attachments,
-        api_version=vk_api_v,
-        owner_id=f'-{vk_group_id}',
-        message=comment)
-
-    os.remove(downloaded_img)
+        api.post_foto_to_group(
+            url=vk_url,
+            access_token=vk_access_token,
+            attachments=attachments,
+            api_version=vk_api_v,
+            owner_id=f'-{vk_group_id}',
+            message=comment)
+        raise ValueError
+    finally:
+        os.remove(downloaded_img)
 
 
 if __name__ == '__main__':
