@@ -47,6 +47,8 @@ def main():
     vk_api_v = os.getenv('VK_API_VERSION')
 
     img_dir = Path(__file__).resolve().parent.joinpath('images')
+    if not img_dir.exists():
+        os.mkdir(img_dir)
     url = 'https://xkcd.com/info.0.json'
 
     comics_id = retrieve_random_comics_num(url)
