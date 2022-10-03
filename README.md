@@ -1,9 +1,10 @@
 ## Description
-This scrip download random comics from <https://xkcd.com/> and post it on a [VK](https://vk.con) group
+This scrip download random comics from <https://xkcd.com/> and post it on a [VK](https://vk.com) group
 
 ### run script
 1) Create .env
-    touch .env
+\
+```touch .env```
 2) Fill up  .env
     - VK_CLIENT_ID=
     - VK_GROUP_ID=
@@ -12,6 +13,8 @@ This scrip download random comics from <https://xkcd.com/> and post it on a [VK]
     - VK_API_VERSION=
 
 3) Install requirements
+\
     pip install -r requirements.txt
 4) Run script
+\
     python main.py
