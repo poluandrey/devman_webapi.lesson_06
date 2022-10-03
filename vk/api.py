@@ -9,9 +9,9 @@ from vk.vk_types import SaveWallPhotoResp, UploadFotoResp
 def retrieve_server_address(
         group_id: str,
         access_token: str,
-        url: str,
         api_version: str) -> str:
-    url = urljoin(url, 'photos.getWallUploadServer')
+    vk_url = 'https://api.vk.com/method/'
+    url = urljoin(vk_url, 'photos.getWallUploadServer')
     params = {
         'v': api_version,
         'group_id': group_id,
@@ -40,15 +40,15 @@ def upload_foto(url: str, file: Path) -> UploadFotoResp:
 
 
 def retrieve_media_detail(
-        url: str,
         access_token: str,
         group_id: str,
         photo: str,
         server: str,
         vk_hash: str,
         api_version: str) -> SaveWallPhotoResp:
+    vk_url = 'https://api.vk.com/method/'
     method = 'photos.saveWallPhoto'
-    vk_url = urljoin(url, method)
+    url = urljoin(vk_url, method)
     params = {
         'group_id': group_id,
         'v': api_version,
@@ -58,7 +58,7 @@ def retrieve_media_detail(
         'hash': vk_hash,
     }
 
-    resp = requests.post(vk_url, params=params)
+    resp = requests.post(url, params=params)
     try:
         vk_resp = resp.json().get('response')[0]
     except KeyError:
@@ -69,15 +69,15 @@ def retrieve_media_detail(
 
 
 def post_foto_to_group(
-        url,
         access_token,
         api_version,
         owner_id: str,
         message: str,
         attachments: str = None,
         from_group: int = 1):
+    vk_url = 'https://api.vk.com/method/'
     method = 'wall.post'
-    vk_url = urljoin(url, method)
+    url = urljoin(vk_url, method)
     params = {
         'access_token': access_token,
         'v': api_version,
@@ -86,5 +86,5 @@ def post_foto_to_group(
         'attachments': attachments,
         'from_group': from_group,
     }
-    resp = requests.post(vk_url, params=params)
+    resp = requests.post(url, params=params)
     resp.raise_for_status()

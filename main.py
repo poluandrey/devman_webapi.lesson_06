@@ -17,7 +17,8 @@ def retrieve_img_url(comics_id: int):
     return comics['img'], comics['alt']
 
 
-def retrieve_random_comics_num(url) -> int:
+def retrieve_random_comics_num() -> int:
+    url = 'https://xkcd.com/info.0.json'
     resp = requests.get(url)
     resp.raise_for_status()
 
@@ -49,32 +50,28 @@ def main():
     img_dir = Path(__file__).resolve().parent.joinpath('images')
     if not img_dir.exists():
         os.mkdir(img_dir)
-    url = 'https://xkcd.com/info.0.json'
 
-    comics_id = retrieve_random_comics_num(url)
+    comics_id = retrieve_random_comics_num()
     img_url, comment = retrieve_img_url(comics_id)
     downloaded_img = download_image(img_url, img_dir)
     try:
         upload_url = api.retrieve_server_address(
             group_id=vk_group_id,
             access_token=vk_access_token,
-            url=vk_url,
             api_version=vk_api_v)
-        resp = api.upload_foto(upload_url, downloaded_img)
+        uploaded_foto = api.upload_foto(upload_url, downloaded_img)
         media_detail = api.retrieve_media_detail(
-            url=vk_url,
             access_token=vk_access_token,
             group_id=vk_group_id,
-            photo=resp.photo,
-            server=resp.server,
-            vk_hash=resp.hash,
+            photo=uploaded_foto.photo,
+            server=uploaded_foto.server,
+            vk_hash=uploaded_foto.hash,
             api_version=vk_api_v
         )
 
         attachments = f'photo{media_detail.owner_id}_{media_detail.media_id}'
 
         api.post_foto_to_group(
-            url=vk_url,
             access_token=vk_access_token,
             attachments=attachments,
             api_version=vk_api_v,
