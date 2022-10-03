@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from vk import api
 
 
-def retrieve_img_url(comics_id: int):
+def retrieve_comics(comics_id: int):
     url = f'https://xkcd.com/{comics_id}/info.0.json'
     resp = requests.get(url)
     resp.raise_for_status()
@@ -27,7 +27,7 @@ def retrieve_random_comics_num() -> int:
     return randint(0, comics_count)
 
 
-def download_image(url, dir_path: Path) -> Path:
+def download_comics(url, dir_path: Path) -> Path:
     resp = requests.get(url)
     resp.raise_for_status()
 
@@ -44,7 +44,6 @@ def download_image(url, dir_path: Path) -> Path:
 def main():
     vk_group_id = os.getenv('VK_GROUP_ID')
     vk_access_token = os.getenv('VK_ACCESS_TOKEN')
-    vk_url = os.getenv('VK_URL')
     vk_api_v = os.getenv('VK_API_VERSION')
 
     img_dir = Path(__file__).resolve().parent.joinpath('images')
@@ -52,8 +51,8 @@ def main():
         os.mkdir(img_dir)
 
     comics_id = retrieve_random_comics_num()
-    img_url, comment = retrieve_img_url(comics_id)
-    downloaded_img = download_image(img_url, img_dir)
+    img_url, comment = retrieve_comics(comics_id)
+    downloaded_img = download_comics(img_url, img_dir)
     try:
         upload_url = api.retrieve_server_address(
             group_id=vk_group_id,
