@@ -6,11 +6,12 @@ This scrip download random comics from <https://xkcd.com/> and post it on a [VK]
 \
 ```touch .env```
 2) Fill up  .env
-    - VK_CLIENT_ID=
-    - VK_GROUP_ID=
-    - VK_ACCESS_TOKEN=
-    - VK_URL=
-    - VK_API_VERSION=
+    ``` 
+    VK_CLIENT_ID=
+    VK_GROUP_ID=
+    VK_ACCESS_TOKEN=
+    VK_URL=
+    VK_API_VERSION=```
 
 3) Install requirements
 \
