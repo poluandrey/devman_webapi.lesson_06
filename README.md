@@ -14,7 +14,7 @@ This scrip download random comics from <https://xkcd.com/> and post it on a [VK]
 
 3) Install requirements
 \
-    pip install -r requirements.txt
+```pip install -r requirements.txt```
 4) Run script
 \
-    python main.py
+```python main.py```
