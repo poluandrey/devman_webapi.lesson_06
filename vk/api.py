@@ -1,8 +1,8 @@
 from pathlib import Path
-from typing import List
 from urllib.parse import urljoin
 
 import requests
+
 from vk.vk_types import SaveWallPhotoResp, UploadFotoResp
 
 
