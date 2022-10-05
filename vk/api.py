@@ -31,10 +31,10 @@ def upload_foto(url: str, file: Path) -> UploadFotoResp:
         }
         resp = requests.post(url, files=files)
     resp.raise_for_status()
-    upload_result = resp.json()
-    server = upload_result.get('server')
-    photo = upload_result.get('photo')
-    foto_hash = upload_result.get('hash')
+    upload_photo = resp.json()
+    server = upload_photo.get('server')
+    photo = upload_photo.get('photo')
+    foto_hash = upload_photo.get('hash')
 
     return UploadFotoResp(server, photo, foto_hash)
 
